@@ -1,5 +1,6 @@
 import subprocess
 
+# Python script for test multi-thread server request
 requests = [
     ["localhost", "9595", "page.html"],
     ["localhost", "9595", "file2.html"],
