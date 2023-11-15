@@ -1,31 +1,58 @@
+#import socket module
 from socket import *
-import sys
+import sys # In order to terminate the program
 
-# Preparing the socket
+#Prepare a sever socket
+
+#Fill in start
 serverSocket = socket(AF_INET, SOCK_STREAM)
-serverPort = 9595 # Arbitrary port number
-serverSocket.bind(('',serverPort)) # Binding the port to the socket
-serverSocket.listen(1) # Waiting for a request
-print("Ready to serve . . .")
+
+# Arbitrary port number
+serverPort = 9595 
+
+# Binding the port to the socket
+serverSocket.bind(('',serverPort)) 
+
+# Waiting for a request
+serverSocket.listen(1) 
+#Fill in end
 
 while True:
-    connectionSocket, addr = serverSocket.accept() # Accepting request
+    #Establish the connection
+    print('Ready to serve...')
+    
+    # Accepting request
+    #Fill in start
+    connectionSocket, addr = serverSocket.accept() 
     print("Request accepted from (address, port) tuple: %s" % (addr,))
+    #Fill in end 
 
     try:
         # Recieve message and check file name
+        
+        #Fill in start
         message = connectionSocket.recv(2048).decode()
+        #Fill in end 
+        
         filename = message.split()[1]
         f = open(filename[1:], 'r')
+        
+        #Fill in start
         outputdata = f.read()
+        #Fill in end 
 
         print("File found.")
+        
+        #Send one HTTP header line into socket
+        
+        #Fill in start
         # Returns header line informing that the file was found
         headerLine = "HTTP/1.1 200 OK\r\n"
         connectionSocket.send(headerLine.encode())
         connectionSocket.send("\r\n".encode())
+        #Fill in end 
 
-        # Sends the file
+        #Send the content of the requested file to the client
         for i in range(0, len(outputdata)):
             connectionSocket.send(outputdata[i].encode())
         connectionSocket.send("\r\n".encode())
@@ -35,6 +62,9 @@ while True:
         connectionSocket.close()
 
     except IOError:
+        #Send response message for file not found
+        
+        #Fill in start 
         print("Warning: file not found.")
 
         # Returns the error header to the browser
@@ -49,11 +79,14 @@ while True:
         for i in range(0, len(outputerr)):
             connectionSocket.send(outputerr[i].encode())
         connectionSocket.send("\r\n".encode())
+        #Fill in end
 
-        # Terminates the connection
+        #Close client socket
+        #Fill in start
         print("Error message sent.")
         connectionSocket.close()
+        #Fill in end 
 
     # Closes the application
     serverSocket.close()
-    sys.exit()
+    sys.exit() #Terminate the program after sending the corresponding data 
