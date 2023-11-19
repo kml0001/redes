@@ -38,25 +38,40 @@ if recv2[:3] != '250':
 
 # Send RCPT TO command and print server response.
 # Fill in start
-
+rctpTo = "RCTP TO: kmychamo@gmail.com\r\n"
+clientSocket.send(rctpTo.encode())
+recv3 = clientSocket.recv(1024).decode()
+print(recv3)
+if recv3[:3] != '250':
+    print('RCTP TO error : 250 reply not received from server.')
 # Fill in end
 
 # Send DATA command and print server response.
 # Fill in start
-
+dataCommand = "DATA: asd\r\n"
+clientSocket.send(dataCommand.encode())
+recv4 = clientSocket.recv(1024).decode()
+print(recv4)
+if recv4[:3] != '250':
+    print('Data error : 250 reply not received from server.')
 # Fill in end
 
 # Send message data.
 # Fill in start
-
+clientSocket.send('\r\n')
+for m in msg:
+    clientSocket.send(m)
 # Fill in end
 
 # Message ends with a single period.
 # Fill in start
-
+clientSocket.send(endmsg)
 # Fill in end
 
 # Send QUIT command and get server response.
 # Fill in start
-
+quitCommand = "QUIT: \r\n"
+clientSocket.send(quitCommand.encode())
+recv5 = clientSocket.recv(1024).decode()
+print(recv5)
 # Fill in end
